@@ -8,6 +8,7 @@ erDiagram
     User ||--o{ PostLike : ""
     User ||--o{ Comment : ""
     User ||--o{ CommentLike : ""
+    User ||--o| Bookmark : ""
     User }o--|| PostTag : ""
     User {
         userId int PK
@@ -22,6 +23,11 @@ erDiagram
         birth varchar
     }
 
+    Bookmark {
+        userId int FK
+        postId int FK
+    }
+
     Follow {
         userId int FK
         followingId int
@@ -31,6 +37,7 @@ erDiagram
     Post ||--o{ Comment : ""
     Post ||--|| PostLike : ""
     Post ||--o{ PostTag : ""
+    Post ||--o{ Bookmark : ""
     Post {
         postId int PK
         userId int FK
@@ -53,9 +60,9 @@ erDiagram
     Comment {
         commentId int PK
         commentText varchar
-        createdAt varchar
         postId int FK
         userId int FK
+        createdAt datetime
     }
 
     CommentLike {

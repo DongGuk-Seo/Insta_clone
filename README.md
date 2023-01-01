@@ -1,72 +1,16 @@
-# Insta_clone
+# Instagram Clone
+<br>
 
-#### ERD : 
-```mermaid
-erDiagram
-    User ||--o{ Follow : ""
-    User ||--o{ Post : ""
-    User ||--o{ PostLike : ""
-    User ||--o{ Comment : ""
-    User ||--o{ CommentLike : ""
-    User ||--o| Bookmark : ""
-    User }o--|| PostTag : ""
-    User {
-        userId int PK
-        email varchar
-        phoneNumber varchar
-        name varchar
-        username varchar
-        password varchar
-        profileImage varchar
-        profileIntro varchar
-        gender varchar
-        birth varchar
-    }
+## 🖥 <strong>Skills
+---
+<br>
 
-    Bookmark {
-        userId int FK
-        postId int FK
-    }
+[![My Skills](https://skillicons.dev/icons?i=python,django,postgresql,nginx,git,github)](https://skillicons.dev)
 
-    Follow {
-        userId int FK
-        followingId int
-        followerId int
-    }
+---
 
-    Post ||--o{ Comment : ""
-    Post ||--|| PostLike : ""
-    Post ||--o{ PostTag : ""
-    Post ||--o{ Bookmark : ""
-    Post {
-        postId int PK
-        userId int FK
-        imageContent varchar
-        textContent varchar
-        createdAt datetime
-    }
+<br>
 
-    PostLike {
-        postId int FK
-        userId int FK
-    }
-    
-    PostTag {
-        postId int FK
-        userId int FK
-        postHashtag varchar
-    }
-    Comment ||--|| CommentLike : ""
-    Comment {
-        commentId int PK
-        commentText varchar
-        postId int FK
-        userId int FK
-        createdAt datetime
-    }
+## 📌 ERD of Project
 
-    CommentLike {
-        commentId int FK
-        userId int FK
-    }
-```
+<img width="1043" alt="스크린샷 2023-01-01 오후 7 11 25" src="https://user-images.githubusercontent.com/94242504/210167265-05272407-a8aa-4294-98be-46bd00e800cd.png">

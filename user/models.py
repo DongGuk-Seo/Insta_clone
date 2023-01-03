@@ -44,10 +44,10 @@ class UserModel(AbstractUser):
         return self.email
 
 class UserDetailModel(models.Model):
-    userId = models.ForeignKey(UserModel,related_name='userId', on_delete=models.CASCADE)
-    name = models.CharField(max_length=30)
+    userId = models.OneToOneField(UserModel,name="userId",on_delete=models.CASCADE, primary_key=True, unique=True)
+    name = models.CharField(max_length=30, null=True, blank=True)
     profileImage = models.ImageField(null=True, blank=True)
-    profileIntro = models.CharField(max_length=100)
-    phoneNumber = models.CharField(max_length=20)
-    gender = models.BooleanField()
-    birth = models.DateTimeField()
+    profileIntro = models.CharField(max_length=100, null=True, blank=True)
+    phoneNumber = models.CharField(max_length=20, null=True, blank=True)
+    gender = models.BooleanField(null=True)
+    birth = models.DateTimeField(null=True)

@@ -1,10 +1,14 @@
 from ninja import Schema, ModelSchema
 from user.models import UserModel, UserDetailModel
 
-class UserIn(Schema):
+class UserSignUp(Schema):
     email: str
     password: str
     username: str
+
+class UserSignIn(Schema):
+    email: str
+    password: str
 
 class UserDetailSchema(Schema):
     name: str = None

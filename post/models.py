@@ -22,15 +22,3 @@ class PostImageModel(models.Model):
 class PostHashtagModel(models.Model):
     post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='hashtag')
     tagName = models.CharField(max_length=100)
-
-class PostCommentModel(models.Model):
-    id = models.BigAutoField(primary_key=True,auto_created=True)
-    post = models.ForeignKey(PostModel, on_delete=models.CASCADE, related_name='comment_post')
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='comment_user')
-    content = models.CharField(max_length=200)
-
-class PostCommentReplyModel(models.Model):
-    id = models.BigAutoField(primary_key=True,auto_created=True)
-    comment = models.ForeignKey(PostCommentModel, on_delete=models.CASCADE, related_name='reply_comment')
-    user = models.ForeignKey(UserModel, on_delete=models.CASCADE, related_name='reply_user')
-    content = models.CharField(max_length=200)

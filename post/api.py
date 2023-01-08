@@ -9,8 +9,6 @@ from post.models import (
     PostModel, 
     PostImageModel, 
     PostHashtagModel,
-    PostCommentModel,
-    PostCommentReplyModel
     )
 
 router = Router()
@@ -44,9 +42,9 @@ def retrieve_post(request, post_id:int):
 
 @router.put("/{int:post_id}/content", auth=JWTAuth())
 def update_post_content(request, post_id:int, data:PostUpdate):
+    post = PostModel.objects.get(id=post_id)
     if request.user == post.user:
         if data.content != None:
-            post = PostModel.objects.get(id=post_id)
             setattr(post,'content',data.content)
             post.save()
         if data.hashtag != None:

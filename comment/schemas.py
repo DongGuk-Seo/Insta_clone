@@ -1,4 +1,4 @@
 from ninja import Schema
 
-class CommentCreate(Schema):
+class CommentSchema(Schema):
     content: str

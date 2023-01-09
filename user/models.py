@@ -34,6 +34,7 @@ class UserModel(AbstractUser):
         ),
     )
     date_joined = models.DateTimeField(_("date joined"), default=timezone.now)
+    follow = models.ManyToManyField('self', symmetrical=False, related_name='following')
 
     USERNAME_FIELD = "username"
 
@@ -44,10 +45,12 @@ class UserModel(AbstractUser):
         return self.email
 
 class UserDetailModel(models.Model):
-    userId = models.OneToOneField(UserModel,name="userId",on_delete=models.CASCADE, primary_key=True, unique=True)
+    user = models.OneToOneField(UserModel,verbose_name="user_id",on_delete=models.CASCADE, primary_key=True, unique=True)
     name = models.CharField(max_length=30, null=True, blank=True)
-    profileImage = models.ImageField(null=True, blank=True)
-    profileIntro = models.CharField(max_length=100, null=True, blank=True)
-    phoneNumber = models.CharField(max_length=20, null=True, blank=True)
+    profile_image = models.ImageField(null=True, blank=True)
+    profile_intro = models.CharField(max_length=100, null=True, blank=True)
+    phone_number = models.CharField(max_length=20, null=True, blank=True)
     gender = models.BooleanField(null=True)
     birth = models.DateTimeField(null=True)
+    follwing_number = models.IntegerField(default=0)
+    follwer_number = models.IntegerField(default=0)

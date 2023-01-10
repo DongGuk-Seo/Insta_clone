@@ -12,8 +12,8 @@ class UserSignIn(Schema):
 
 class UserDetailSchema(Schema):
     name: str = None
-    profilePhoto: str = None
-    profileIntro: str = None
-    phoneNumber: str = None
+    profile_photo: str = None
+    profile_intro: str = None
+    phone_number: str = None
     gender: bool = None
     birth: str = None

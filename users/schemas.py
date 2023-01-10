@@ -1,12 +1,11 @@
-from ninja import Schema, ModelSchema
-from user.models import UserModel, UserDetailModel
+from ninja import Schema
 
-class UserSignUp(Schema):
+class UserSignUpSchema(Schema):
     email: str
     password: str
     username: str
 
-class UserSignIn(Schema):
+class UserSignInSchema(Schema):
     email: str
     password: str
 

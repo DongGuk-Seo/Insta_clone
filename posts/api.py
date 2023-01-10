@@ -9,6 +9,8 @@ from posts.models import (
     Post, 
     PostImage, 
     PostHashtag,
+    PostLike,
+    PostBookmark
     )
 
 router = Router()
@@ -88,3 +90,13 @@ def delete_post(request, post_id, image_name):
         image.delete()
         return {"detail" : "사진을 삭제하셨습니다"}
     raise ValidationError({"detail" : "게시글 작성자가 일치하지 않습니다"})
+
+@router.post("/like/{int:post_id}", auth=JWTAuth())
+def post_like(request, post_id):
+    like_post = PostLike.objects.filter(post_id=post_id, user_id=request.user.id)
+    if like_post.exists():
+        like_post.delete()
+        return {"detail" : "좋아요를 취소하셨습니다"}
+    else:
+        like_post.create(post_id=post_id,user_id=request.user.id)
+        return {"detail" : "좋아요를 설정하셨습니다"}

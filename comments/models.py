@@ -14,7 +14,7 @@ class Comment(models.Model):
 
 class Reply(models.Model):
     id = models.BigAutoField(auto_created=True, primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comment_reply')
-    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='comment_reply')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reply')
+    comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='reply')
     content = models.CharField(max_length=200)
     createdAt = models.DateTimeField(default=timezone.now)

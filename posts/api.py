@@ -33,8 +33,8 @@ def create_post(request, data:PostCreateSchema = Form(default=None), images:List
 @router.get("/{int:post_id}")
 def retrieve_post(request, post_id:int):
     post = get_object_or_exception(Post, id=post_id)
-    images = [obj.image.url for obj in PostImage.objects.filter(post=post_id)]
-    tags = [obj.tag_name for obj in PostHashtag.objects.filter(post=post_id)]
+    images = [obj.image.url for obj in PostImage.objects.select_related('post').filter(post=post_id)]
+    tags = [obj.tag_name for obj in PostHashtag.objects.select_related('post').filter(post=post_id)]
     data = {
         "content" : post.content,
         "images" : images,
@@ -122,3 +122,18 @@ def post_bookmark(request, post_id):
     else:
         bookmark_post.create(post_id=post_id,user_id=request.user.id)
         return {"detail" : "북마크를 설정하셨습니다"}
+
+@router.get("/bookmark", auth=JWTAuth())
+def get_bookmark(request):
+    bookmark_posts = PostBookmark.objects.select_related('post').filter(user_id = request.user.id)
+    posts = []
+    for post in bookmark_posts:
+        images = [obj.image.url for obj in PostImage.objects.select_related('post').filter(post=post.post_id)]
+        tags = [obj.tag_name for obj in PostHashtag.objects.select_related('post').filter(post=post.post_id)]
+        data = {
+            "content" : post.post.content,
+            "images" : images,
+            "tags" : tags
+        }
+        posts.append(data)
+    return posts

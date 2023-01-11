@@ -55,3 +55,28 @@ def user_follow(request, follow_id:int):
             return {"detail" : f"{follow_user.username}님을 팔로우하셨습니다"}
     raise ValidationError("본인 계정은 팔로우 할 수 없습니다")
 
+@router.get("/following/{int:user_id}", auth=JWTAuth())
+def get_user_following(request, user_id:int):
+    user_following = UserFollow.objects.select_related('follow').filter(user_id=user_id).order_by('-user_id')
+    users = []
+    for user in user_following:
+        user_dic = {}
+        user_id_ = user.follow_id
+        user_dic["user_id"] = user_id_
+        user_dic["username"] = user.follow.username
+        user_dic["profile_image"] = UserDetail.objects.get(user_id=user_id_).profile_image.url
+        users.append(user_dic)
+    return users
+
+@router.get("/follower/{int:user_id}", auth=JWTAuth())
+def get_user_following(request, user_id:int):
+    user_follower = UserFollow.objects.select_related('follow').filter(follow_id=user_id).order_by('-user_id')
+    users = []
+    for user in user_follower:
+        user_dic = {}
+        user_id_ = user.user_id
+        user_dic["user_id"] = user_id_
+        user_dic["username"] = user.user.username
+        user_dic["profile_image"] = UserDetail.objects.get(user_id=user_id_).profile_image.url
+        users.append(user_dic)
+    return users

@@ -1,7 +1,7 @@
 from ninja import Router
 from ninja.errors import ValidationError
 from users.schemas import UserSignUpSchema, UserSignInSchema
-from users.models import User, UserDetail
+from users.models import User, UserDetail, UserFollow
 from ninja_jwt.tokens import RefreshToken
 from ninja_jwt.authentication import JWTAuth
 
@@ -42,13 +42,16 @@ def sign_in(request, data: UserSignInSchema):
     raise ValidationError("이메일이 존재하지 않습니다")
 
 @router.post("/follow/{int:follow_id}", auth=JWTAuth())
-def user_follow(request, follow_id):
+def user_follow(request, follow_id:int):
     if follow_id != request.user.id:
-        user = User.objects.get(id=follow_id)
-        if user.following.filter(id=request.user.id).exists():
-            user.following.remove(request.user)
-            return {"detail" : f"{user.username}님의 팔로우를 해지하셨습니다"}
+        user = UserFollow.objects.filter(user_id=request.user.id)
+        check_user = user.filter(follow_id=follow_id)
+        follow_user = User.objects.get(id=follow_id)
+        if check_user.exists():
+            check_user.get(follow_id=follow_id).delete()
+            return {"detail" : f"{follow_user.username}님의 팔로우를 해지하셨습니다"}
         else:
-            user.following.add(request.user)
-            return {"detail" : f"{user.username}님을 팔로우하셨습니다"}
+            UserFollow.objects.create(user_id=request.user.id, follow_id=follow_id)
+            return {"detail" : f"{follow_user.username}님을 팔로우하셨습니다"}
     raise ValidationError("본인 계정은 팔로우 할 수 없습니다")
+

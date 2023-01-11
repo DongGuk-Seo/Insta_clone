@@ -9,6 +9,8 @@ from posts.models import (
     Post, 
     PostImage, 
     PostHashtag,
+    PostLike,
+    PostBookmark
     )
 
 router = Router()
@@ -88,3 +90,35 @@ def delete_post(request, post_id, image_name):
         image.delete()
         return {"detail" : "사진을 삭제하셨습니다"}
     raise ValidationError({"detail" : "게시글 작성자가 일치하지 않습니다"})
+
+@router.post("/like/{int:post_id}", auth=JWTAuth())
+def post_like(request, post_id):
+    like_post = PostLike.objects.filter(post_id=post_id, user_id=request.user.id)
+    if like_post.exists():
+        like_post.delete()
+        return {"detail" : "좋아요를 취소하셨습니다"}
+    else:
+        like_post.create(post_id=post_id,user_id=request.user.id)
+        return {"detail" : "좋아요를 설정하셨습니다"}
+
+@router.get("/like/{int:post_id}", auth=JWTAuth())
+def post_like_users(request, post_id):
+    like_users = PostLike.objects.filter(post_id=post_id).all()
+    users_info = []
+    for user in like_users:
+        user_dic = {}
+        user_dic["username"] = user.user.username
+        user_dic["userId"] = user.user.id
+        user_dic["profileImage"] = user.user.userdetail.profile_image.url
+        users_info.append(user_dic)
+    return {"users ":users_info}
+
+@router.post("/bookmark/{int:post_id}", auth=JWTAuth())
+def post_bookmark(request, post_id):
+    bookmark_post = PostBookmark.objects.filter(post_id=post_id, user_id=request.user.id)
+    if bookmark_post.exists():
+        bookmark_post.delete()
+        return {"detail" : "북마크를 취소하셨습니다"}
+    else:
+        bookmark_post.create(post_id=post_id,user_id=request.user.id)
+        return {"detail" : "북마크를 설정하셨습니다"}

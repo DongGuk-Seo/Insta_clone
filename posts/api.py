@@ -30,7 +30,7 @@ def create_post(request, data:PostCreateSchema = Form(default=None), images:List
             image_.save()
     return {"detail" : "게시글을 작성하셨습니다"}
 
-@router.get("/{int:post_id}")
+@router.get("/{int:post_id}", auth=JWTAuth())
 def retrieve_post(request, post_id:int):
     post = get_object_or_exception(Post, id=post_id)
     images = [obj.image.url for obj in PostImage.objects.select_related('post').filter(post=post_id)]
@@ -83,7 +83,7 @@ def delete_post(request, post_id):
     raise ValidationError({"detail" : "게시글 작성자가 일치하지 않습니다"})
 
 @router.delete("/{int:post_id}/{str:image_name}", auth=JWTAuth())
-def delete_post(request, post_id, image_name):
+def delete_post_image(request, post_id, image_name):
     post = Post.objects.get(id=post_id)
     if request.user == post.user:
         image = get_object_or_exception(PostImage, post=post, image=f'{post_id}/{image_name}')

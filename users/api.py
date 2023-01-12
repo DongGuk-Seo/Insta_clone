@@ -69,7 +69,7 @@ def get_user_following(request, user_id:int):
     return users
 
 @router.get("/follower/{int:user_id}", auth=JWTAuth())
-def get_user_following(request, user_id:int):
+def get_user_follower(request, user_id:int):
     user_follower = UserFollow.objects.select_related('follow').filter(follow_id=user_id).order_by('-user_id')
     users = []
     for user in user_follower:

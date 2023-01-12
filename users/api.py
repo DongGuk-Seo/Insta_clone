@@ -42,7 +42,7 @@ def sign_in(request, data: UserSignInSchema):
     raise ValidationError("이메일이 존재하지 않습니다")
 
 @router.post("/check")
-def sign_in(request, data: UserCheckSchema):
+def check_email_and_username(request, data: UserCheckSchema):
     email = data.email
     username = data.username
     if email == None:

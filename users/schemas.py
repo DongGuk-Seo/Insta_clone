@@ -9,6 +9,10 @@ class UserSignInSchema(Schema):
     email: str
     password: str
 
+class UserCheckSchema(Schema):
+    email: str = None
+    username: str = None
+
 class UserDetailSchema(Schema):
     name: str = None
     profile_photo: str = None

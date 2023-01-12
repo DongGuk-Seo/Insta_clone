@@ -1,6 +1,6 @@
 from ninja import Router
-from ninja.errors import ValidationError
-from users.schemas import UserSignUpSchema, UserSignInSchema
+from ninja.errors import ValidationError, HttpError
+from users.schemas import UserSignUpSchema, UserSignInSchema, UserCheckSchema
 from users.models import User, UserDetail, UserFollow
 from ninja_jwt.tokens import RefreshToken
 from ninja_jwt.authentication import JWTAuth
@@ -40,6 +40,20 @@ def sign_in(request, data: UserSignInSchema):
                 }
         raise ValidationError("틀린 비밀번호 입니다")
     raise ValidationError("이메일이 존재하지 않습니다")
+
+@router.post("/check")
+def sign_in(request, data: UserCheckSchema):
+    email = data.email
+    username = data.username
+    if email == None:
+        raise HttpError(400,"이메일을 입력해주세요")
+    elif username == None:
+        raise HttpError(400,"사용자 이름을 입력해주세요")
+    if User.objects.filter(email=email).exists():
+        raise HttpError(400,"이미 존재하는 이메일입니다")
+    elif User.objects.filter(username=username).exists():
+        raise HttpError(400,"이미 존재하는 사용자 이름입니다")
+    return {"detail" : "사용 가능한 이메일과 사용자 이름입니다"}
 
 @router.post("/follow/{int:follow_id}", auth=JWTAuth())
 def user_follow(request, follow_id:int):
